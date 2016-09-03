@@ -1,0 +1,4 @@
+将javax/microedition/lcdui/Form替换为kavax/microedition/lcdui/Fork
+将javax/microedition/lcdui/TextBox替换为kavax/microedition/lcdui/TextBok
+将javax/microedition/lcdui/TextField替换为kavax/microedition/lcdui/TextFielk
+将javax/microedition/midlet/MIDlet替换为kavax/microedition/lcdui/MIDtxt
