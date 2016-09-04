@@ -1,0 +1,32 @@
+package kavax.microedition.lcdui;
+public class QH {
+    public QH() {
+    }
+    public String Conversion(String s, int i, int j) {
+    String ty="0";
+     String ky="1";
+      gb =  new String[] { ty,ky };
+
+    
+ String sret =  new String(getClass().getResourceAsStream("/data"));
+        int k = s.length() - 1;
+        String s1 = "";
+        for (int l = 0; l <= k; l++) {
+            int i1 = gb[i].indexOf(s.charAt(l));
+            try {
+                if (i1 != -1) {
+                    s1 = s1 + gb[j].charAt(i1);
+                } else {
+                    s1 = s1 + s.charAt(l);
+                }
+            } catch (Exception e) {
+                s1 = s1 + s.charAt(l);
+            }
+        }
+        String s2 = s1;
+        gb = null;
+        return s2;
+    }
+    public boolean firstStart;
+        public String gb[] = { "3","4" };
+}
