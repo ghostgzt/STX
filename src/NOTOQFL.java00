@@ -1,0 +1,182 @@
+ 
+// Source File Name:   NOTOQFL.java
+
+
+
+import java.io.PrintStream;
+import javax.microedition.lcdui.*;
+import kavax.microedition.lcdui.*;
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+public class NOTOQFL extends MIDtxt
+    implements CommandListener
+{
+
+    public NOTOQFL()
+    {
+        c1Command = new Command("管理", 4, 1);
+        c2Command = new Command("返回", 3, 1);
+        exitCommand = new Command("管理", 7, 1);
+        screenCommand1 = new Command("保存", 1, 1);
+        screenCommand2 = new Command("关于", 1, 1);
+        screenCommand3 = new Command("统计", 1, 1);
+        screenCommand4 = new Command("清屏", 1, 1);
+        screenCommand5 = new Command("删除", 1, 1);
+        screenCommand6 = new Command("打开", 1, 1);
+        screenCommand7 = new Command("新建", 1, 1);
+        screenCommandx = new Command("退出", 1, 1);
+        screenCommand8 = new Command("返回", 2, 1);
+        tb = new TextBok("记事本", "", 0x186a0, 0);
+    }
+
+    protected void startApp()
+        throws MIDletStateChangeException
+    {
+        Display.getDisplay(this).setCurrent(tb);
+        System.out.println("startApp");
+        disp = Display.getDisplay(this);
+        alt = new Alert("");
+        tb.addCommand(exitCommand);
+        tb.addCommand(screenCommand1);
+        tb.addCommand(screenCommand4);
+        tb.addCommand(screenCommand3);
+        tb.addCommand(screenCommand2);
+        tb.addCommand(screenCommandx);
+        tb.setCommandListener(this);
+        l = new List("笔记管理", 1);
+        l.addCommand(screenCommand7);
+        l.addCommand(screenCommand6);
+        l.addCommand(screenCommand5);
+        l.addCommand(screenCommand8);
+        l.addCommand(screenCommandx);
+        l.setCommandListener(this);
+        f = new Fork("已保存:");
+        f.addCommand(c1Command);
+        f.addCommand(screenCommand8);
+        f.setCommandListener(this);
+        disp.setCurrent(tb);
+    }
+
+    protected void pauseApp()
+    {
+        System.out.println("pauseApp");
+    }
+
+    protected void destroyApp(boolean arg0)
+        throws MIDletStateChangeException
+    {
+        System.out.println("destroyApp");
+    }
+
+    public void commandAction(Command c, Displayable d)
+    {
+        String cmd = c.getLabel();
+        if(c == exitCommand)
+            disp.setCurrent(l);
+        if(c == screenCommand8)
+        {
+            Display.getDisplay(this).setCurrent(tb);
+            System.out.println("startApp");
+            disp = Display.getDisplay(this);
+            alt = new Alert("");
+            tb.addCommand(exitCommand);
+            tb.addCommand(screenCommand1);
+            tb.addCommand(screenCommand4);
+            tb.addCommand(screenCommand3);
+            tb.addCommand(screenCommand2);
+            tb.setCommandListener(this);
+        }
+        if(c == screenCommand2)
+        {
+            alt.setTitle("关于作者:");
+            alt.setString("七分吝的第一个J2ME程序,刚接触J2ME不到两天,所以做得比较劣质,暂时还不能把编写的内容保存为TXT,所以退出软件之后写的东西就没有了,以后会慢慢学习,加上保存为TXT文本的功能.欢迎登陆八神智能:8zntx.com或者加QQ:474924864一起探讨.(PS:当初学PY的时候,第一个软件也是笔记本,呵呵,现在回到原点重新开始了.)");
+            alt.setType(AlertType.INFO);
+            alt.setTimeout(-2);
+            disp.setCurrent(alt, tb);
+        }
+        if(c == screenCommand1)
+        {
+            l.append(tb.getString(), null);
+            f.deleteAll();
+            f.append("内容:" + tb.getString() + "\n");
+            f.append("字符:" + tb.size() + "\n");
+            disp.setCurrent(f);
+        }
+        if(c == c1Command)
+            disp.setCurrent(l);
+        if(cmd.equals("新建"))
+        {
+            f.deleteAll();
+            tb.delete(0, tb.size());
+            disp.setCurrent(tb);
+        } else
+        if(cmd.equals("打开"))
+        {
+            f.deleteAll();
+            l.delete(l.getSelectedIndex());
+            System.out.println(l.getSelectedIndex());
+            disp.setCurrent(tb);
+        } else
+        if(cmd.equals("删除"))
+        {
+            disp.setCurrent(l);
+            l.delete(l.getSelectedIndex());
+        } else
+        if(cmd.equals("退出"))
+            notifyDestroyed();
+        if(c == c2Command)
+        {
+            Display.getDisplay(this).setCurrent(tb);
+            System.out.println("startApp");
+            disp = Display.getDisplay(this);
+            alt = new Alert("");
+            tb.addCommand(exitCommand);
+            tb.addCommand(screenCommand1);
+            tb.addCommand(screenCommand4);
+            tb.addCommand(screenCommand3);
+            tb.addCommand(screenCommand2);
+            tb.setCommandListener(this);
+        }
+        if(c == screenCommand4)
+        {
+            tb = new TextBok("记事本", "", 0x186a0, 0);
+            Display.getDisplay(this).setCurrent(tb);
+            System.out.println("startApp");
+            disp = Display.getDisplay(this);
+            alt = new Alert("");
+            tb.addCommand(exitCommand);
+            tb.addCommand(screenCommand1);
+            tb.addCommand(screenCommand4);
+            tb.addCommand(screenCommand3);
+            tb.addCommand(screenCommand2);
+            tb.setCommandListener(this);
+        }
+        if(c == screenCommand3)
+        {
+            alt.setTitle("统计:");
+            alt.setString("您一共可以写" + tb.getMaxSize() + "个字,现在已经写了" + tb.size() + "个字,还可以写" + (tb.getMaxSize() - tb.size()) + "个字.");
+            alt.setType(AlertType.INFO);
+            alt.setTimeout(-2);
+            disp.setCurrent(alt, tb);
+        }
+    }
+
+    private Command exitCommand;
+    private Command screenCommand1;
+    private Command screenCommand2;
+    private Command screenCommand3;
+    private Command screenCommand4;
+    private Command screenCommand5;
+    private Command screenCommand6;
+    private Command screenCommand7;
+    private Command screenCommand8;
+    private Command c1Command;
+    private Command c2Command;
+    private Command screenCommandx;
+    private TextBok tb;
+    private Alert alt;
+    private Display disp;
+    private Fork f;
+    private List l;
+}

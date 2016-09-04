@@ -1,0 +1,161 @@
+ 
+
+import java.io.PrintStream;
+import javax.microedition.lcdui.*;
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.rms.RecordStore;
+
+public final class Main extends MIDlet
+    implements CommandListener, Runnable
+{
+
+    public void run()
+    {
+        do
+            try
+            {
+                System.gc();
+                Runtime.getRuntime().gc();
+                refreshData();
+                Thread.currentThread().setPriority(10);
+                Thread.currentThread();
+                Thread.sleep(1000 * Integer.parseInt(((TextField)frm.get(0)).getString()));
+            }
+            catch(Exception exception) { }
+        while(true);
+    }
+
+    public Main()
+    {
+        frm = new Form("自动清理堆");
+    }
+
+    protected void destroyApp(boolean flag)
+    {
+        a = ((TextField)frm.get(0)).getString();
+        if(Integer.parseInt(a) != 0)
+            try
+            {
+                rs.setRecord(1, a.getBytes(), 0, a.length());
+            }
+            catch(Exception exception)
+            {
+                System.out.println(exception);
+            }
+        try
+        {
+            rs.closeRecordStore();
+        }
+        catch(Exception exception1)
+        {
+            System.out.println(exception1);
+        }
+        notifyDestroyed();
+    }
+
+    protected void pauseApp()
+    {
+    }
+
+    protected void startApp()
+    {
+        if(display == null)
+            initApp();
+        else
+            refreshData();
+    }
+
+    private void initApp()
+    {
+        firstmem = (int)Runtime.getRuntime().totalMemory();
+        try
+        {
+            rs = RecordStore.openRecordStore("[AutoHeap]", true);
+        }
+        catch(Exception exception)
+        {
+            System.out.println(exception);
+        }
+        a = new String("10");
+        try
+        {
+            if(rs.getNumRecords() == 0)
+                rs.addRecord(a.getBytes(), 0, a.length());
+            a = new String(rs.getRecord(1));
+        }
+        catch(Exception exception1)
+        {
+            System.out.println(exception1);
+        }
+        display = Display.getDisplay(this);
+        display.setCurrent(frm);
+        frm.setCommandListener(this);
+        frm.addCommand(cmdClear);
+        frm.addCommand(cmdMore);
+        frm.addCommand(cmdMini);
+        frm.addCommand(cmdExit);
+        frm.append(new TextField("清理间隔（秒）:", a, 4, 2));
+        frm.append("总内存: " + Long.toString(Runtime.getRuntime().totalMemory()) + "\n");
+        frm.append("可用内存: " + Long.toString(Runtime.getRuntime().freeMemory()));
+        frm.append("分配: " + Long.toString(Runtime.getRuntime().totalMemory() - (long)firstmem) + "\n");
+        refreshData();
+        (new Thread(this)).start();
+    }
+
+    private void refreshData()
+    {
+        frm.set(1, new StringItem(null, "总内存: " + Long.toString(Runtime.getRuntime().totalMemory()) + "\n"));
+        frm.set(2, new StringItem(null, "可用内存: " + Long.toString(Runtime.getRuntime().freeMemory()) + "\n"));
+        frm.set(3, new StringItem(null, "分配: " + Long.toString(Runtime.getRuntime().totalMemory() - (long)firstmem) + "\n"));
+    }
+
+    private void getHEAP()
+    {
+        int i = 0;
+        boolean flag;
+        do
+        {
+            flag = false;
+            i += 10240;
+            try
+            {
+                int ai[] = new int[i];
+                flag = true;
+            }
+            catch(OutOfMemoryError outofmemoryerror) { }
+        } while(flag);
+    }
+
+    public void commandAction(Command command, Displayable displayable)
+    {
+        if(command == cmdClear)
+        {
+            System.gc();
+            Runtime.getRuntime().gc();
+            refreshData();
+        } else
+        if(command == cmdMini)
+            display.setCurrent(null);
+        else
+        if(command == cmdMore)
+        {
+            getHEAP();
+            System.gc();
+            Runtime.getRuntime().gc();
+            refreshData();
+        } else
+        {
+            destroyApp(true);
+        }
+    }
+
+    private Display display;
+    private int firstmem;
+    private String a;
+    private final Command cmdClear = new Command("清理", 4, 1);
+    private final Command cmdMore = new Command("区分", 1, 2);
+    private final Command cmdMini = new Command("最小化", 1, 3);
+    private final Command cmdExit = new Command("退出", 7, 4);
+    private RecordStore rs;
+    Form frm;
+}

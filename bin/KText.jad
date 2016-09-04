@@ -1,0 +1,22 @@
+MIDlet-1: ST5, , kavax.microedition.lcdui.ST5
+MIDlet-2: testjava, , testjava
+MIDlet-3: NOTOQFL, /l.png, NOTOQFL
+MIDlet-4: KText, /l.png, WebClient
+MIDlet-5: UC7.8, , cn.uc.application.app.WebClient
+MIDlet-6: chen, , chen.chen
+MIDlet-Jar-Size: 100
+MIDlet-Jar-URL: KText.jar
+MIDlet-Name: KText
+MIDlet-Vendor: Unknown
+MIDlet-Version: 1.0
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.1
+keyDelete: -8
+kfile: file:///root1/text.txt
+kfzx: 100
+khide: 不是
+klen: 0
+kmax: 0
+krms: file:///root1/rms.db
+ktsfh: file:///root1/TSFH.ini
+kty: 是
